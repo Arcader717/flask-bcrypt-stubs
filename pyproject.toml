@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flask-bcrypt-stubs"
+version = "0.1.0"
+authors = [
+    { name="Online?" },
+]
+description = "Typing stubs for Flask-Bcrypt"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Framework :: Flask",
+    "Typing :: Stubs Only"
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Arcader717/flask-bcrypt-stubs"
+Issues = "https://github.com/Arcader717/flask-bcrypt-stubs/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/flask_bcrypt"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/flask_bcrypt/**/*.pyi",
+    "README.md",
+    "LICENSE"
+]
+
+[tool.pyright]
+typeCheckingMode = "basic"
+reportMissingTypeStubs = false
+
+[tool.mypy]
+ignore_missing_imports = true   
