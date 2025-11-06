@@ -5,20 +5,42 @@ on:
     tags:
       - "v*"
 
+concurrency:
+  group: publish-pypi-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/flask-bcrypt-stubs/
     permissions:
       id-token: write
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
-      - run: |
-          python -m pip install - U pip
-          pip install build
-          python -m build
+      - uses: actions/setup-uv@v7
+        with: 
+          python-version: "3.11"
+      - name: Build
+        run: uv build
+
+      - name: Smoke test wheel
+        run: |
+          uv venv --seed .venv
+          uv pip install -p .venv/bin/python dist/*.whl
+          .venv/bin/python - <<'PY'
+          from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
+          PY
+
+      - name: Smoke test sdist
+        run: |
+          uv venv --seed .venv2
+          uv pip install -p .venv2/bin/python dist/*.tar.gz
+          .venv2/bin/python - <<'PY'
+          from flask_bcrypt import Bcrypt
+          PY
       - name: Upload to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

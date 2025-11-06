@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python + uv
+        uses: stral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          uv pip install pyright mypy types-werkzeug types-click flask-bcrypt flask
+
+      - name: Verify public API coverage (pyright)
+        run: pyright --verifytypes flask_crypt --ignoreexternal
+
+      - name: Stubtest against runtime (mypy)
+        run: |
+          python -m mypy.stubtest flask_bcrypt \
+            --concise \
+            --allowlist stubtest-allowlist.txt || (echo "::warning::stubtest failed"; exit 1)
+
+      - name: Build wheel/sdist
+        run: uv build
+      
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: dist/*
