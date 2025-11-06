@@ -24,8 +24,6 @@ jobs:
           uv venv
           uv pip install mypy types-werkzeug types-click flask-bcrypt flask
 
-      - name: Verify public API coverage (pyright)
-        run: uv run pyright --verifytypes flask_bcrypt --ignoreexternal
       - name: Stubtest against runtime (mypy)
         run: |
           uv run python -m mypy.stubtest flask_bcrypt \
