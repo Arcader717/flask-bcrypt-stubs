@@ -27,7 +27,7 @@ jobs:
       - name: Enter venv
         run: source .venv/bin/activate
       - name: Verify public API coverage (pyright)
-        run: pyright --verifytypes flask_crypt --ignoreexternal
+        run: python -m pyright --verifytypes flask_crypt --ignoreexternal
 
       - name: Stubtest against runtime (mypy)
         run: |
