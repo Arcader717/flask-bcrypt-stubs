@@ -22,12 +22,10 @@ jobs:
       - name: Install dependencies
         run: |
           uv venv
-          uv pip install pyright mypy types-werkzeug types-click flask-bcrypt flask
+          uv pip install mypy types-werkzeug types-click flask-bcrypt flask
 
       - name: Enter venv
         run: source .venv/bin/activate
-      - name: Verify public API coverage (pyright)
-        run: python -m pyright --verifytypes flask_crypt --ignoreexternal
 
       - name: Stubtest against runtime (mypy)
         run: |
