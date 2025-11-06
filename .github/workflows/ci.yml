@@ -23,10 +23,6 @@ jobs:
         run: |
           uv venv
           uv pip install mypy types-werkzeug types-click flask-bcrypt flask
-
-      - name: Enter venv
-        run: source .venv/bin/activate
-
       - name: Stubtest against runtime (mypy)
         run: |
           python -m mypy.stubtest flask_bcrypt \
