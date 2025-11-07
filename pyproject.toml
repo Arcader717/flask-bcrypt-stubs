@@ -25,7 +25,7 @@ Homepage = "https://github.com/Arcader717/flask-bcrypt-stubs"
 Issues = "https://github.com/Arcader717/flask-bcrypt-stubs/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/flask_bcrypt"]
+packages = ["src/flask_bcrypt.pyi"]
 
 [tool.hatch.build.targets.sdist]
 include = [
