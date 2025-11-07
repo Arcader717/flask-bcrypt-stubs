@@ -26,6 +26,10 @@ jobs:
           uv venv
           uv pip install mypy types-werkzeug types-click flask-bcrypt flask
           uv pip install dist/*.whl
+
+      - name: Package discovery test (temp)
+        run: uv run python -c "import flask_bcrypt, inspect; print(flask_bcrypt.__file__)"
+
       - name: Stubtest against runtime (mypy)
         run: |
           uv run python -m mypy.stubtest flask_bcrypt \
